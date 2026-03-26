@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0612"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Manifestar</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<style>
+  :root {
+    --bg: #0a0612;
+    --bg2: #110d1f;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --gold-border: rgba(201,168,76,0.3);
+    --text: #f0e8d8;
+    --text-dim: rgba(240,232,216,0.5);
+    --purple: #2d1b4e;
+    --radius: 16px;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow: hidden;
+  }
+
+  /* ── STARS BACKGROUND ── */
+  #stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(45,27,78,0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(15,8,30,0.8) 0%, transparent 50%);
+  }
+  #stars::before, #stars::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(201,168,76,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 10%, rgba(201,168,76,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 60%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 15% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 85%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 35%, rgba(201,168,76,0.5) 0%, transparent 100%);
+  }
+  #stars::after {
+    background-image:
+      radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 90%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 35%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 55%, rgba(201,168,76,0.3) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 95% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 75%, rgba(201,168,76,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 70%, rgba(201,168,76,0.5) 0%, transparent 100%);
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: 0.6; } to { opacity: 1; } }
+
+  /* ── LAYOUT ── */
+  #app { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; flex-direction: column; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 20px 24px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--gold-border);
+    background: linear-gradient(180deg, rgba(10,6,18,0.95) 0%, transparent 100%);
+    flex-shrink: 0;
+  }
+  .logo-symbol { font-size: 28px; animation: pulse-glow 3s ease-in-out infinite; display: block; }
+  @keyframes pulse-glow {
+    0%,100% { text-shadow: 0 0 10px rgba(201,168,76,0.5), 0 0 20px rgba(201,168,76,0.3); }
+    50% { text-shadow: 0 0 20px rgba(201,168,76,0.9), 0 0 40px rgba(201,168,76,0.5); }
+  }
+  header h1 { font-family: var(--serif); font-weight: 300; font-size: 22px; color: var(--gold-light); letter-spacing: 4px; text-transform: uppercase; margin-top: 4px; }
+  .daily-quote { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; margin-top: 4px; font-style: italic; font-family: var(--serif); }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 0; background: rgba(10,6,18,0.98);
+    border-top: 1px solid var(--gold-border);
+    flex-shrink: 0; order: 10;
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  nav button {
+    flex: 1; background: none; border: none; color: var(--text-dim);
+    padding: 10px 4px; cursor: pointer; transition: color 0.3s;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-family: var(--sans); font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  nav button .nav-icon { font-size: 20px; }
+  nav button.active { color: var(--gold); }
+  nav button.active .nav-icon { text-shadow: 0 0 12px rgba(201,168,76,0.7); }
+
+  /* ── PAGES ── */
+  .pages { flex: 1; overflow: hidden; position: relative; }
+  .page {
+    position: absolute; inset: 0;
+    overflow-y: auto; overflow-x: hidden;
+    padding: 20px 20px 20px;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.35s, transform 0.35s;
+    pointer-events: none;
+  }
+  .page.active { opacity: 1; transform: none; pointer-events: all; }
+
+  /* ── CARDS ── */
+  .card {
+    background: linear-gradient(135deg, rgba(45,27,78,0.4) 0%, rgba(17,13,31,0.8) 100%);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+  }
+  .card-title {
+    font-family: var(--serif); font-size: 18px; font-weight: 400;
+    color: var(--gold-light); margin-bottom: 4px; letter-spacing: 1px;
+  }
+  .card-sub { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 16px; text-transform: uppercase; }
+
+  /* ── INPUTS ── */
+  textarea, input[type=text], input[type=date], select {
+    width: 100%; background: rgba(10,6,18,0.7); border: 1px solid var(--gold-border);
+    border-radius: 10px; color: var(--text); font-family: var(--sans); font-size: 14px;
+    padding: 12px 14px; outline: none; transition: border-color 0.3s;
+    font-weight: 300; resize: none;
+  }
+  textarea:focus, input:focus, select:focus { border-color: var(--gold); }
+  textarea { min-height: 100px; }
+  select option { background: #1a0f2e; }
+
+  label { font-size: 11px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 6px; margin-top: 14px; }
+  label:first-child { margin-top: 0; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: block; width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    border: none; border-radius: 10px; color: #0a0612;
+    font-family: var(--sans); font-weight: 500; font-size: 13px;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+    margin-top: 16px; transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn:active { opacity: 0.85; transform: scale(0.98); }
+  .btn-sm {
+    display: inline-block; width: auto; padding: 8px 16px;
+    font-size: 11px; margin-top: 10px;
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); border-radius: 8px;
+  }
+  .btn-sm:active { background: var(--gold-dim); }
+  .btn-danger {
+    background: transparent; border: 1px solid rgba(200,80,80,0.4);
+    color: rgba(200,80,80,0.7); font-size: 11px; padding: 6px 12px;
+    border-radius: 6px; margin-top: 8px; width: auto;
+  }
+
+  /* ── PAGE: INÍCIO ── */
+  .affirmation-display {
+    text-align: center;
+    padding: 28px 20px;
+    background: linear-gradient(135deg, rgba(45,27,78,0.5), rgba(17,13,31,0.9));
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    position: relative; overflow: hidden;
+  }
+  .affirmation-display::before {
+    content: '✦';
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 60px; color: rgba(201,168,76,0.06);
+  }
+  .aff-label { font-size: 10px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+  .aff-text { font-family: var(--serif); font-size: 22px; font-style: italic; line-height: 1.5; color: var(--text); font-weight: 300; }
+  .aff-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+  .aff-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-border); transition: background 0.3s; }
+  .aff-dot.active { background: var(--gold); }
+
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-box {
+    background: rgba(17,13,31,0.8); border: 1px solid var(--gold-border);
+    border-radius: 12px; padding: 14px 10px; text-align: center;
+  }
+  .stat-num { font-family: var(--serif); font-size: 28px; color: var(--gold-light); line-height: 1; }
+  .stat-lbl { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── PAGE: AFIRMAÇÕES ── */
+  .aff-list { margin-top: 16px; }
+  .aff-item {
+    background: rgba(17,13,31,0.7); border: 1px solid var(--gold-border);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color 0.3s;
+  }
+  .aff-item.done { border-color: var(--gold); }
+  .aff-check {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1.5px solid var(--gold-border); background: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all 0.3s; font-size: 12px;
+  }
+  .aff-item.done .aff-check { background: var(--gold); border-color: var(--gold); color: #0a0612; }
+  .aff-item-text { font-family: var(--serif); font-size: 15px; font-style: italic; flex: 1; color: var(--text); }
+  .aff-item.done .aff-item-text { color: var(--gold-light); }
+  .aff-delete { background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; padding: 4px; }
+
+  /* ── PAGE: DIÁRIO ── */
+  .entries-list { margin-top: 16px; }
+  .entry-item {
+    background: rgba(17,13,31,0.7); border: 1px solid var(--gold-border);
+    border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  }
+  .entry-date { font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .entry-text { font-family: var(--serif); font-size: 15px; line-height: 1.6; color: var(--text); font-style: italic; }
+  .entry-category { display: inline-block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; border: 1px solid var(--gold-border); color: var(--gold); margin-top: 8px; }
+
+  /* ── PAGE: VISÃO ── */
+  .vision-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-top: 16px;
+  }
+  .vision-card {
+    background: rgba(17,13,31,0.8); border: 1px solid var(--gold-border);
+    border-radius: 12px; aspect-ratio: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer; transition: border-color 0.3s, transform 0.2s;
+    overflow: hidden; position: relative; padding: 12px;
+  }
+  .vision-card:active { transform: scale(0.96); }
+  .vision-card.filled { border-color: var(--gold); }
+  .vision-card .vc-emoji { font-size: 36px; }
+  .vision-card .vc-label { font-family: var(--serif); font-size: 13px; color: var(--gold-light); margin-top: 8px; text-align: center; font-style: italic; }
+  .vision-card .vc-wish { font-size: 11px; color: var(--text-dim); margin-top: 4px; text-align: center; line-height: 1.4; }
+  .vision-card .vc-add { font-size: 28px; color: var(--gold-border); }
+  .vision-card .vc-del { position: absolute; top: 6px; right: 6px; background: rgba(200,80,80,0.2); border: none; color: rgba(200,80,80,0.6); border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  /* ── PAGE: METAS ── */
+  .meta-item {
+    background: rgba(17,13,31,0.7); border: 1px solid var(--gold-border);
+    border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  }
+  .meta-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .meta-title { font-family: var(--serif); font-size: 17px; color: var(--gold-light); font-style: italic; }
+  .meta-cat { font-size: 9px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 3px; }
+  .meta-progress { height: 4px; background: rgba(201,168,76,0.15); border-radius: 2px; overflow: hidden; margin: 10px 0; }
+  .meta-bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 2px; transition: width 0.5s ease; }
+  .meta-footer { display: flex; justify-content: space-between; align-items: center; }
+  .meta-pct { font-size: 12px; color: var(--gold); }
+  .meta-date { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+  .meta-controls { display: flex; gap: 8px; margin-top: 10px; }
+  .meta-btn { background: rgba(201,168,76,0.1); border: 1px solid var(--gold-border); border-radius: 6px; color: var(--gold); font-size: 16px; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(5,3,12,0.9);
+    z-index: 100; display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: linear-gradient(160deg, #1a0f2e, #0d0818);
+    border: 1px solid var(--gold-border); border-radius: 20px 20px 0 0;
+    padding: 28px 24px 40px; width: 100%; max-width: 480px;
+    transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-title { font-family: var(--serif); font-size: 22px; color: var(--gold-light); font-weight: 400; margin-bottom: 20px; letter-spacing: 1px; }
+  .modal-handle { width: 40px; height: 3px; background: var(--gold-border); border-radius: 2px; margin: 0 auto 20px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #0a0612; font-size: 12px; font-weight: 500; letter-spacing: 1px;
+    padding: 10px 24px; border-radius: 30px;
+    opacity: 0; transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none; white-space: nowrap; z-index: 200;
+    text-transform: uppercase;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── EMPTY STATE ── */
+  .empty { text-align: center; padding: 40px 20px; color: var(--text-dim); }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+  .empty-text { font-family: var(--serif); font-size: 16px; font-style: italic; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-border); border-radius: 2px; }
+
+  .divider { height: 1px; background: var(--gold-border); margin: 16px 0; opacity: 0.4; }
+  .section-title { font-family: var(--serif); font-size: 14px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="app">
+  <header>
+    <span class="logo-symbol">✦</span>
+    <h1>Manifestar</h1>
+    <p class="daily-quote" id="headerQuote">O universo conspira a seu favor</p>
+  </header>
+
+  <div class="pages">
+    <!-- INÍCIO -->
+    <div class="page active" id="page-home">
+      <div class="affirmation-display">
+        <p class="aff-label">Afirmação do Dia</p>
+        <p class="aff-text" id="dailyAff">Carregando...</p>
+        <div class="aff-dots" id="affDots"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="statAff">0</div>
+          <div class="stat-lbl">Afirmações</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statDiary">0</div>
+          <div class="stat-lbl">Registros</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statGoals">0</div>
+          <div class="stat-lbl">Metas</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Lei da Atração</div>
+        <div class="card-sub">O que é O Segredo?</div>
+        <p style="font-family:var(--serif);font-size:15px;line-height:1.7;color:var(--text-dim);font-style:italic;">
+          "Tudo que existe no universo é energia. Seus pensamentos são energia. Ao manter pensamentos e sentimentos positivos, você emite uma frequência que atrai para si aquilo em que acredita."
+        </p>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:10px;letter-spacing:1px;">— Rhonda Byrne</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">As 3 Etapas</div>
+        <div class="card-sub">Como manifestar</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;color:var(--gold);flex-shrink:0;">1</div>
+            <div><div style="font-size:13px;color:var(--gold-light);letter-spacing:1px;">PEÇA</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Defina o que deseja com clareza e intenção</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;color:var(--gold);flex-shrink:0;">2</div>
+            <div><div style="font-size:13px;color:var(--gold-light);letter-spacing:1px;">ACREDITE</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Sinta como se já tivesse recebido o que pediu</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;color:var(--gold);flex-shrink:0;">3</div>
+            <div><div style="font-size:13px;color:var(--gold-light);letter-spacing:1px;">RECEBA</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Esteja aberto e grato para receber as bênçãos</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFIRMAÇÕES -->
+    <div class="page" id="page-aff">
+      <div class="card">
+        <div class="card-title">Nova Afirmação</div>
+        <div class="card-sub">Escreva no presente, com certeza</div>
+        <textarea id="newAffText" placeholder="Ex: Eu sou abundante e atraio prosperidade..."></textarea>
+        <button class="btn" onclick="addAffirmation()">✦ Adicionar Afirmação</button>
+      </div>
+      <div class="section-title">Minhas Afirmações</div>
+      <div class="aff-list" id="affList"></div>
+    </div>
+
+    <!-- DIÁRIO -->
+    <div class="page" id="page-diary">
+      <div class="card">
+        <div class="card-title">Novo Registro</div>
+        <div class="card-sub">Gratidão e manifestações do dia</div>
+        <label>Categoria</label>
+        <select id="diaryCategory">
+          <option value="gratidão">🙏 Gratidão</option>
+          <option value="manifestação">✨ Manifestação recebida</option>
+          <option value="intenção">🌟 Intenção do dia</option>
+          <option value="reflexão">💭 Reflexão</option>
+        </select>
+        <label>Registro</label>
+        <textarea id="diaryText" placeholder="Escreva aqui sua gratidão, sua intenção ou uma manifestação que chegou até você..."></textarea>
+        <button class="btn" onclick="addDiaryEntry()">✦ Registrar</button>
+      </div>
+      <div class="section-title">Histórico</div>
+      <div class="entries-list" id="diaryList"></div>
+    </div>
+
+    <!-- VISÃO -->
+    <div class="page" id="page-vision">
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-title">Quadro de Visão</div>
+        <div class="card-sub">Visualize sua vida ideal</div>
+        <p style="font-size:12px;color:var(--text-dim);line-height:1.6;">Toque nos quadros para adicionar as áreas da sua vida que deseja manifestar. A visualização acelera a manifestação.</p>
+      </div>
+      <div class="vision-grid" id="visionGrid"></div>
+    </div>
+
+    <!-- METAS -->
+    <div class="page" id="page-goals">
+      <div class="card">
+        <div class="card-title">Nova Meta</div>
+        <div class="card-sub">Defina sua intenção com clareza</div>
+        <label>Meta / Desejo</label>
+        <input type="text" id="goalTitle" placeholder="Ex: Conquistar meu apartamento próprio"/>
+        <label>Categoria</label>
+        <select id="goalCategory">
+          <option value="💰 Prosperidade">💰 Prosperidade</option>
+          <option value="❤️ Amor">❤️ Amor</option>
+          <option value="🏠 Lar">🏠 Lar</option>
+          <option value="💼 Carreira">💼 Carreira</option>
+          <option value="🌿 Saúde">🌿 Saúde</option>
+          <option value="✈️ Viagem">✈️ Viagem</option>
+          <option value="🌟 Crescimento">🌟 Crescimento</option>
+        </select>
+        <label>Data de manifestação</label>
+        <input type="date" id="goalDate"/>
+        <button class="btn" onclick="addGoal()">✦ Definir Meta</button>
+      </div>
+      <div class="section-title">Minhas Metas</div>
+      <div id="goalsList"></div>
+    </div>
+  </div>
+
+  <nav>
+    <button class="active" onclick="navigate('home',this)">
+      <span class="nav-icon">✦</span>
+      <span>Início</span>
+    </button>
+    <button onclick="navigate('aff',this)">
+      <span class="nav-icon">🗣</span>
+      <span>Afirmações</span>
+    </button>
+    <button onclick="navigate('diary',this)">
+      <span class="nav-icon">📖</span>
+      <span>Diário</span>
+    </button>
+    <button onclick="navigate('vision',this)">
+      <span class="nav-icon">🌌</span>
+      <span>Visão</span>
+    </button>
+    <button onclick="navigate('goals',this)">
+      <span class="nav-icon">🎯</span>
+      <span>Metas</span>
+    </button>
+  </nav>
+</div>
+
+<!-- MODAL VISÃO -->
+<div class="modal-overlay" id="visionModal" onclick="closeVisionModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Adicionar ao Quadro</div>
+    <input type="hidden" id="visionIndex"/>
+    <label>Emoji / Símbolo</label>
+    <input type="text" id="visionEmoji" placeholder="Ex: 🏠" maxlength="2"/>
+    <label>Área da vida</label>
+    <input type="text" id="visionLabel" placeholder="Ex: Minha casa dos sonhos"/>
+    <label>Descreva sua visão</label>
+    <textarea id="visionWish" placeholder="Como é esse aspecto da sua vida ideal?"></textarea>
+    <button class="btn" onclick="saveVisionCard()">✦ Adicionar à Visão</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const DB = {
+  get: k => JSON.parse(localStorage.getItem(k) || 'null'),
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+
+const AFFIRMATIONS_DEFAULT = [
+  "Eu mereço tudo de melhor que a vida tem a oferecer.",
+  "O universo conspira para realizar meus sonhos.",
+  "Sou um ímã para a abundância, saúde e amor.",
+  "Meus pensamentos criam a minha realidade.",
+  "Estou aberta para receber bênçãos infinitas.",
+  "Gratidão abre as portas para mais milagres.",
+  "Tudo que desejo já está a caminho de mim.",
+];
+
+const QUOTES = [
+  "O universo conspira a seu favor",
+  "Tudo que você imaginar, pode realizar",
+  "Seus pensamentos moldam sua realidade",
+  "A gratidão é a porta para a abundância",
+  "Você é um ser magnético de possibilidades",
+];
+
+const VISION_AREAS = ['💰','❤️','🏠','💼','🌿','✈️','🌟','🔮'];
+const VISION_LABELS = ['Prosperidade','Amor','Lar','Carreira','Saúde','Viagem','Crescimento','Espiritual'];
+
+let affirmations = DB.get('affirmations') || [...AFFIRMATIONS_DEFAULT];
+let diaryEntries = DB.get('diary') || [];
+let visionCards = DB.get('vision') || new Array(8).fill(null);
+let goals = DB.get('goals') || [];
+let currentAffIdx = 0;
+let affInterval;
+
+// ── NAVIGATION ──
+function navigate(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  btn.classList.add('active');
+  if (page === 'aff') renderAffirmations();
+  if (page === 'diary') renderDiary();
+  if (page === 'vision') renderVision();
+  if (page === 'goals') renderGoals();
+  if (page === 'home') updateStats();
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── HOME ──
+function initHome() {
+  // Rotating quote
+  let qi = 0;
+  const qEl = document.getElementById('headerQuote');
+  setInterval(() => { qi = (qi+1)%QUOTES.length; qEl.textContent = QUOTES[qi]; }, 5000);
+
+  // Daily affirmation carousel
+  renderDailyAff();
+  affInterval = setInterval(nextAff, 4000);
+  document.querySelector('.affirmation-display').addEventListener('click', () => {
+    clearInterval(affInterval);
+    nextAff();
+    affInterval = setInterval(nextAff, 4000);
+  });
+  updateStats();
+}
+
+function renderDailyAff() {
+  const el = document.getElementById('dailyAff');
+  const dots = document.getElementById('affDots');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.textContent = affirmations[currentAffIdx % affirmations.length];
+    el.style.opacity = '1';
+    el.style.transition = 'opacity 0.5s';
+  }, 300);
+  dots.innerHTML = affirmations.slice(0,5).map((_, i) =>
+    `<div class="aff-dot ${i === currentAffIdx % 5 ? 'active' : ''}"></div>`
+  ).join('');
+}
+
+function nextAff() {
+  currentAffIdx = (currentAffIdx + 1) % affirmations.length;
+  renderDailyAff();
+}
+
+function updateStats() {
+  document.getElementById('statAff').textContent = affirmations.length;
+  document.getElementById('statDiary').textContent = diaryEntries.length;
+  document.getElementById('statGoals').textContent = goals.length;
+}
+
+// ── AFFIRMATIONS ──
+function addAffirmation() {
+  const txt = document.getElementById('newAffText').value.trim();
+  if (!txt) return toast('Escreva uma afirmação ✦');
+  affirmations.unshift(txt);
+  DB.set('affirmations', affirmations);
+  document.getElementById('newAffText').value = '';
+  renderAffirmations();
+  toast('Afirmação adicionada ✦');
+  updateStats();
+}
+
+function toggleAff(i) {
+  affirmations[i]._done = !affirmations[i]._done;
+  // Store done state separately
+  let done = DB.get('affDone') || {};
+  done[affirmations[i]] = !done[affirmations[i]];
+  DB.set('affDone', done);
+  renderAffirmations();
+}
+
+function deleteAff(i) {
+  affirmations.splice(i, 1);
+  DB.set('affirmations', affirmations);
+  renderAffirmations();
+  toast('Removida');
+  updateStats();
+}
+
+function renderAffirmations() {
+  const done = DB.get('affDone') || {};
+  const list = document.getElementById('affList');
+  if (!affirmations.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🗣</div><div class="empty-text">Adicione sua primeira afirmação</div></div>';
+    return;
+  }
+  list.innerHTML = affirmations.map((a, i) => {
+    const isDone = done[a];
+    return `<div class="aff-item ${isDone ? 'done' : ''}">
+      <button class="aff-check" onclick="toggleAffDone('${CSS.escape(a)}')">${isDone ? '✦' : ''}</button>
+      <div class="aff-item-text">${a}</div>
+      <button class="aff-delete" onclick="deleteAff(${i})">×</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleAffDone(aText) {
+  const done = DB.get('affDone') || {};
+  // Find the original text (unescape)
+  const key = affirmations.find(a => CSS.escape(a) === aText) || aText;
+  done[key] = !done[key];
+  DB.set('affDone', done);
+  renderAffirmations();
+}
+
+// ── DIARY ──
+function addDiaryEntry() {
+  const txt = document.getElementById('diaryText').value.trim();
+  const cat = document.getElementById('diaryCategory').value;
+  if (!txt) return toast('Escreva seu registro ✦');
+  const entry = { text: txt, category: cat, date: new Date().toISOString() };
+  diaryEntries.unshift(entry);
+  DB.set('diary', diaryEntries);
+  document.getElementById('diaryText').value = '';
+  renderDiary();
+  toast('Registrado com gratidão ✦');
+  updateStats();
+}
+
+function deleteDiary(i) {
+  diaryEntries.splice(i, 1);
+  DB.set('diary', diaryEntries);
+  renderDiary();
+  updateStats();
+}
+
+const CATEGORY_EMOJI = {gratidão:'🙏',manifestação:'✨',intenção:'🌟',reflexão:'💭'};
+
+function renderDiary() {
+  const list = document.getElementById('diaryList');
+  if (!diaryEntries.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📖</div><div class="empty-text">Seu diário de gratidão está vazio</div></div>';
+    return;
+  }
+  list.innerHTML = diaryEntries.map((e, i) => {
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'});
+    return `<div class="entry-item">
+      <div class="entry-date">${dateStr}</div>
+      <div class="entry-text">${e.text}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="entry-category">${CATEGORY_EMOJI[e.category]||''} ${e.category}</span>
+        <button class="btn-danger btn" onclick="deleteDiary(${i})" style="margin-top:0;padding:4px 10px;font-size:10px;">×</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── VISION BOARD ──
+function renderVision() {
+  const grid = document.getElementById('visionGrid');
+  grid.innerHTML = visionCards.map((card, i) => {
+    if (card) {
+      return `<div class="vision-card filled" onclick="openVisionModal(${i})">
+        <button class="vc-del" onclick="event.stopPropagation();deleteVision(${i})">×</button>
+        <div class="vc-emoji">${card.emoji}</div>
+        <div class="vc-label">${card.label}</div>
+        <div class="vc-wish">${card.wish.substring(0,60)}${card.wish.length>60?'...':''}</div>
+      </div>`;
+    }
+    return `<div class="vision-card" onclick="openVisionModal(${i})">
+      <div class="vc-add">+</div>
+      <div class="vc-label" style="color:var(--text-dim);font-size:11px;">${VISION_LABELS[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+function openVisionModal(idx) {
+  const card = visionCards[idx];
+  document.getElementById('visionIndex').value = idx;
+  document.getElementById('visionEmoji').value = card ? card.emoji : VISION_AREAS[idx];
+  document.getElementById('visionLabel').value = card ? card.label : VISION_LABELS[idx];
+  document.getElementById('visionWish').value = card ? card.wish : '';
+  document.getElementById('visionModal').classList.add('open');
+}
+
+function closeVisionModal(e) {
+  if (e.target === document.getElementById('visionModal')) {
+    document.getElementById('visionModal').classList.remove('open');
+  }
+}
+
+function saveVisionCard() {
+  const idx = parseInt(document.getElementById('visionIndex').value);
+  visionCards[idx] = {
+    emoji: document.getElementById('visionEmoji').value || VISION_AREAS[idx],
+    label: document.getElementById('visionLabel').value || VISION_LABELS[idx],
+    wish: document.getElementById('visionWish').value,
+  };
+  DB.set('vision', visionCards);
+  document.getElementById('visionModal').classList.remove('open');
+  renderVision();
+  toast('Visão adicionada ✦');
+}
+
+function deleteVision(idx) {
+  visionCards[idx] = null;
+  DB.set('vision', visionCards);
+  renderVision();
+  toast('Removido');
+}
+
+// ── GOALS ──
+function addGoal() {
+  const title = document.getElementById('goalTitle').value.trim();
+  const cat = document.getElementById('goalCategory').value;
+  const date = document.getElementById('goalDate').value;
+  if (!title) return toast('Defina sua meta ✦');
+  const goal = { title, category: cat, date, progress: 0, created: new Date().toISOString() };
+  goals.unshift(goal);
+  DB.set('goals', goals);
+  document.getElementById('goalTitle').value = '';
+  document.getElementById('goalDate').value = '';
+  renderGoals();
+  toast('Meta definida ✦');
+  updateStats();
+}
+
+function changeProgress(i, delta) {
+  goals[i].progress = Math.max(0, Math.min(100, (goals[i].progress || 0) + delta));
+  DB.set('goals', goals);
+  renderGoals();
+  if (goals[i].progress === 100) toast('Meta manifestada! ✦✦✦');
+}
+
+function deleteGoal(i) {
+  goals.splice(i, 1);
+  DB.set('goals', goals);
+  renderGoals();
+  updateStats();
+  toast('Removida');
+}
+
+function renderGoals() {
+  const list = document.getElementById('goalsList');
+  if (!goals.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">Defina sua primeira meta de manifestação</div></div>';
+    return;
+  }
+  list.innerHTML = goals.map((g, i) => {
+    const pct = g.progress || 0;
+    const dateStr = g.date ? new Date(g.date+'T00:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}) : '';
+    return `<div class="meta-item">
+      <div class="meta-header">
+        <div>
+          <div class="meta-title">${g.title}</div>
+          <div class="meta-cat">${g.category}</div>
+        </div>
+        <button class="btn-danger btn" onclick="deleteGoal(${i})" style="margin:0;padding:4px 10px;font-size:10px;width:auto;">×</button>
+      </div>
+      <div class="meta-progress"><div class="meta-bar" style="width:${pct}%"></div></div>
+      <div class="meta-footer">
+        <span class="meta-pct">${pct}% manifestado</span>
+        ${dateStr ? `<span class="meta-date">✦ ${dateStr}</span>` : ''}
+      </div>
+      <div class="meta-controls">
+        <button class="meta-btn" onclick="changeProgress(${i},-10)">−</button>
+        <button class="meta-btn" onclick="changeProgress(${i},10)">+</button>
+        <button class="meta-btn" onclick="changeProgress(${i},100-goals[${i}].progress)" title="Manifestada!">✦</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PWA ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ── INIT ──
+initHome();
+</script>
+</body>
+</html>
