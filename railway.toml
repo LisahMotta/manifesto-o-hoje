@@ -1,6 +1,2 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install -g serve"
-
-[deploy]
-startCommand = "serve . --listen 0.0.0.0:$PORT --no-clipboard"
