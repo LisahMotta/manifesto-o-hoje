@@ -1,0 +1,12 @@
+{
+  "name": "manifestar-o-hoje",
+  "version": "1.0.0",
+  "description": "App de manifestação PWA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
